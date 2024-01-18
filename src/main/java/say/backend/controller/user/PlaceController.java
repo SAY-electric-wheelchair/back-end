@@ -20,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 @Tag(name = "(사용자) 장소 API")
 @RequestMapping("/api/places")
 public class PlaceController {
