@@ -57,16 +57,31 @@ public class AdminPlaceController {
         }
     }
 
+//    @Operation(summary="장소 리스트 조회", description = "필터링 조건에 맞는 장소 리스트 반환" +
+//            " (주의사항: placeCategory로 enum 값 외의 값을 주면 400error 뜸.)")
+//    @GetMapping("/list")
+//    public BaseResponse<List<PlaceInfo>> getPlaceList(@RequestBody PlaceSearchDto placeSearchDto) {
+//        try{
+//            // call Service
+//            List<PlaceInfo> resultData = placeInfoService.getPlaceList(placeSearchDto.getPlaceName(), placeSearchDto.getPlaceCategory());
+//            return new BaseResponse<List<PlaceInfo>>(resultData);
+//        } catch(BusinessException e) {
+//            return new BaseResponse(e.getErrorCode());
+//        }
+//    }
+
     @Operation(summary="장소 리스트 조회", description = "필터링 조건에 맞는 장소 리스트 반환" +
             " (주의사항: placeCategory로 enum 값 외의 값을 주면 400error 뜸.)")
     @GetMapping("/list")
-    public BaseResponse<List<PlaceInfo>> getPlaceList(@RequestBody PlaceSearchDto placeSearchDto) {
-        try{
+    public BaseResponse<List<PlaceInfo>> getPlaceList(
+            @RequestParam(value = "placeName", required = false) String placeName,
+            @RequestParam(value = "placeCategoryList", required = false) List<PlaceCategory> placeCategoryList) {
+        try {
             // call Service
-            List<PlaceInfo> resultData = placeInfoService.getPlaceList(placeSearchDto.getPlaceName(), placeSearchDto.getPlaceCategory());
-            return new BaseResponse<List<PlaceInfo>>(resultData);
-        } catch(BusinessException e) {
-            return new BaseResponse(e.getErrorCode());
+            List<PlaceInfo> resultData = placeInfoService.getPlaceList(placeName, placeCategoryList);
+            return new BaseResponse<>(resultData);
+        } catch (BusinessException e) {
+            return new BaseResponse<>(e.getErrorCode());
         }
     }
 
