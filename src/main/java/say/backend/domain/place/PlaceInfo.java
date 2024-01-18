@@ -59,4 +59,16 @@ public class PlaceInfo {
 
     @OneToMany(mappedBy = "placeIdx")
     private List<PlaceFile> placeFileList = new ArrayList<>();
+
+    @Override
+    public String toString(){
+
+        String place_info_str = "";
+        place_info_str += placeName += "\n";
+        place_info_str += address += "\n";
+        place_info_str += addressDetail += "\n";
+
+        return place_info_str;
+    }
+
 }
