@@ -13,14 +13,17 @@ import say.backend.domain.report.ReportInfo;
 @Getter @Setter @Entity
 @Table(name = "report_file")
 public class ReportFile {
+    @EmbeddedId
+    private ReportFileIdx ReportFileIdx;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="report_idx")
-    @Id
+    @MapsId("reportIdx")
     private ReportInfo reportIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="file_idx")
-    @Id
+    @MapsId("fileIdx")
     private FileInfo fileIdx;
 
 }

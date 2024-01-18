@@ -27,6 +27,7 @@ public enum ErrorCode {
 
     /*서버, DB 4000*/
     DATABASE_ERROR(false, 4000, "DB에 문제가 발생했습니다."),
+    NO_EXIST_VALUE(false, 4001, "DB에 데이터가 존재하지 않습니다."),
     ;
 
 

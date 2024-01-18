@@ -13,14 +13,17 @@ import say.backend.domain.place.PlaceInfo;
 @Getter @Setter @Entity
 @Table(name = "place_file")
 public class PlaceFile {
+    @EmbeddedId
+    private PlaceFileIdx placeFileIdx;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="place_idx")
-    @Id
+    @MapsId("placeIdx")
     private PlaceInfo placeIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="file_idx")
-    @Id
+    @MapsId("fileIdx")
     private FileInfo fileIdx;
 
 }

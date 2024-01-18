@@ -1,6 +1,6 @@
 package say.backend.domain.place;
 
-public enum PlaceCategory {
+public enum PlaceCategory{
     CHARGE("CHARGE"),
     REPAIR("REPAIR"),
     AIR_INJECTOR("AIR_INJECTOR");
@@ -14,4 +14,5 @@ public enum PlaceCategory {
     public String getPlaceCategory() {
         return this.placeCategory;
     }
+
 }
