@@ -28,6 +28,12 @@ spring:
   #          non_contextual_creation: true
   #      format_sql: true
   #      show_sql: true
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
 
 logging:
   level:

@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+import static say.backend.domain.common.Constants.SENDER_PHONE_NUMBER;
+
 @RestController
 @RequestMapping("/api")
 public class ARSController {
 
     private final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
     private final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
-    private final String SENDER_PHONE_NUMBER = "+12016694104";
 
     @PostMapping("/voice")
     public void incomingCall(HttpServletRequest request, HttpServletResponse response) {
