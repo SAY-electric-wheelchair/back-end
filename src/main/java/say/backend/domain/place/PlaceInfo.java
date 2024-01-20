@@ -50,10 +50,10 @@ public class PlaceInfo {
     @Column(name="mod_dt")
     private LocalDateTime modDt;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'N'")
     @Column(name="del_yn")
-    private DelYn delYn;
+    private DelYn delYn = DelYn.N;
 
     @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")

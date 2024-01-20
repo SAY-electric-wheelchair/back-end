@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import say.backend.domain.place.PlaceCategory;
 import say.backend.domain.place.PlaceInfo;
+import say.backend.dto.place.PlaceResDto;
 import say.backend.dto.place.PlaceSearchDto;
 import say.backend.exception.common.BusinessException;
 import say.backend.response.BaseResponse;
@@ -29,11 +30,11 @@ public class PlaceController {
 
     @Operation(summary = "장소 상세 정보 조회", description = "idx에 해당하는 장소 정보 1개 반환")
     @GetMapping("/{placeIdx}")
-    public BaseResponse<PlaceInfo> getPlaceDetail(@Parameter(description = "장소고유번호" )@PathVariable("placeIdx") String placeIdx) {
+    public BaseResponse<PlaceResDto> getPlaceDetail(@Parameter(description = "장소고유번호" )@PathVariable("placeIdx") String placeIdx) {
         try{
             // call service
-            PlaceInfo resultData = placeInfoService.getPlaceDetail(placeIdx);
-            return new BaseResponse<PlaceInfo>(resultData);
+            PlaceResDto resultData = placeInfoService.getPlaceDetail(placeIdx);
+            return new BaseResponse<PlaceResDto>(resultData);
         } catch(BusinessException e) {
             return new BaseResponse(e.getErrorCode());
         }

@@ -13,7 +13,7 @@ import java.util.List;
 @Schema(title = "장소 조회 결과 dto")
 public class PlaceResDto extends PlaceInfo {
     @Schema(description = "고장여부", example = "")
-    private ReportState reportState;
+    private String reportState;
 
     @Schema(description = "장소 사진", example = "")
     private List<String> placeImgList;
