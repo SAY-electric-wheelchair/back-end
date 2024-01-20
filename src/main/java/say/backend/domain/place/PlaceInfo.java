@@ -1,5 +1,6 @@
 package say.backend.domain.place;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -54,12 +55,15 @@ public class PlaceInfo {
     @Column(name="del_yn")
     private DelYn delYn;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")
     private List<PlaceLink> placeLinkList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")
     private List<ReportInfo> reportInfoList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")
     private List<PlaceFile> placeFileList = new ArrayList<>();
 }
