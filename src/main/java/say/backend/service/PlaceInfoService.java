@@ -1,12 +1,11 @@
 package say.backend.service;
 
 import say.backend.domain.common.DelYn;
-import say.backend.domain.file.PlaceFileRepository;
+import say.backend.domain.file.FileInfoRepository;
 import say.backend.domain.place.PlaceCategory;
 import say.backend.domain.place.PlaceInfo;
 import say.backend.domain.place.PlaceInfoRepository;
 
-import say.backend.domain.report.ReportInfo;
 import say.backend.domain.report.ReportInfoRepository;
 import say.backend.domain.report.ReportState;
 import say.backend.dto.place.*;
@@ -29,6 +28,7 @@ public class PlaceInfoService {
 
     private final PlaceInfoRepository placeInfoRepository;
     private final ReportInfoRepository reportInfoRepository;
+    private final FileInfoRepository fileInfoRepository;
 
     @Transactional
     public PlaceInfo createPlace(PlaceCreateDto pcd) {
@@ -66,6 +66,7 @@ public class PlaceInfoService {
             // get place data
             Optional<PlaceInfo> placeData = placeInfoRepository.findByPlaceIdx(placeIdx);
             List<ReportState> reportStateList = reportInfoRepository.findByPlaceIdx(placeData.get());
+            List<String> fileList = fileInfoRepository.findSaveFileNamesByPlaceIdx(placeData.get());
 
             // check empty value
             if(placeData.isEmpty()) {
@@ -96,6 +97,11 @@ public class PlaceInfoService {
                 resultData.setReportState("수리중");
             } else {
                 resultData.setReportState("사용가능");
+            }
+
+            // set Img data
+            if(!fileList.isEmpty()){
+                resultData.setPlaceImgList(fileList);
             }
 
             // return

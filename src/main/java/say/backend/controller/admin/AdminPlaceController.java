@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import say.backend.domain.place.PlaceCategory;
 import say.backend.domain.place.PlaceInfo;
-import say.backend.domain.place.PlaceInfoRepository;
 import say.backend.dto.place.*;
 import say.backend.exception.common.BusinessException;
 import say.backend.exception.common.ErrorCode;
@@ -23,7 +22,6 @@ import java.util.List;
 @Tag(name = "(관리자) 장소 API")
 @RequestMapping("/api/admin/places")
 public class AdminPlaceController {
-    private final PlaceInfoRepository placeInfoRepository;
 
     private final PlaceInfoService placeInfoService;
 
