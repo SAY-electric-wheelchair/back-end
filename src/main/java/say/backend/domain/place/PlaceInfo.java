@@ -27,6 +27,9 @@ public class PlaceInfo {
     @Column(name="place_name")
     private String placeName;
 
+    @Column(name="place_phone")
+    private String placePhone;
+
     @Column(name="address")
     private String address;
 
