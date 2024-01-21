@@ -36,30 +36,21 @@ public class ReportController {
         this.reportInfoRepository = reportInfoRepository;
     }
 
-    @Operation(summary = "신고 등록", description = "사진과 글 등록")
+    @Operation(summary = "신고 등록", description = "신고 사진과 글 등록")
     @PostMapping("/create")
     public BaseResponse<ReportInfo> createReport(@RequestBody ReportCreateDto reportCreateDto) {
         try{
-            // image file 필수
-            if(reportCreateDto.getPhotoUrl() == null)
+            // validation
+            if (reportCreateDto.getPlaceIdx() == null
+                    || reportCreateDto.getImgList().stream().allMatch(url -> url == null)) {
                 throw new BusinessException(ErrorCode.EMPTY_DATA);
+            }
 
-            ReportResDto reportResDto = reportService.createReport(reportCreateDto.getContent(), reportCreateDto.getPhotoUrl());
-            return new BaseResponse<ReportInfo>(reportResDto);
+            ReportInfo resultData = reportService.createReport(reportCreateDto);
+            return new BaseResponse<ReportInfo>(resultData);
         } catch(BusinessException e) {
             return new BaseResponse(e.getErrorCode());
         }
     }
-
-//    @Operation(summary = "게시글 등록", description = "게시글에서 글을 등록했습니다.")
-//    @PostMapping("/create")
-//    public BaseResponse<BoardCreateRes> createBoard(@RequestBody BoardCreateReq boardInsertReq) {
-//        try{
-//            BoardCreateRes boardInsertRes = boardService.createBoard(boardInsertReq.getUserId(), boardInsertReq.getPreferId(), boardInsertReq.getClothesId(), boardInsertReq.getContent(), boardInsertReq.getPhotoUrl());
-//            return new BaseResponse<>(boardInsertRes);
-//        } catch(BusinessException e) {
-//            return new BaseResponse<>(e.getErrorCode());
-//        }
-//    }
 
 }

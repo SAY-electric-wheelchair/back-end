@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 @Service
-@PropertySource("classpath:application-security.yml")
+@PropertySource("classpath:application-security.properties")
 @NoArgsConstructor
 public class S3Config {
     private AmazonS3 s3Client;

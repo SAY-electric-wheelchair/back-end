@@ -14,7 +14,7 @@ import say.backend.domain.report.ReportInfo;
 @Table(name = "report_file")
 public class ReportFile {
     @EmbeddedId
-    private ReportFileIdx ReportFileIdx;
+    private ReportFileIdx reportFileIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="report_idx")

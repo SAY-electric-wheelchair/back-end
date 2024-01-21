@@ -63,15 +63,18 @@ public class S3Uploader {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws  IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if(convertFile.createNewFile()) {
+    private Optional<File> convert(MultipartFile file) {
+        try {
+            File convertFile = new File(file.getOriginalFilename());
+            convertFile.createNewFile();
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
             }
             return Optional.of(convertFile);
+        } catch (IOException e) {
+            e.printStackTrace(); // 실제 프로덕션 코드에서는 로깅 등으로 적절히 처리해야 합니다.
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
 }

@@ -3,7 +3,9 @@ package say.backend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import say.backend.domain.common.DelYn;
+import say.backend.domain.file.FileInfo;
 import say.backend.domain.file.ReportFile;
 import say.backend.domain.file.ReportFileRepository;
 import say.backend.domain.report.ReportInfo;
@@ -23,40 +25,45 @@ public class ReportService {
 
     private final ReportInfoRepository reportInfoRepository;
     private final ReportFileRepository reportFileRepository;
+    private final S3Uploader s3Uploader; // S3Uploader 추가
 
     @Transactional
-    public ReportInfo createReport(ReportCreateDto pcd) {
+    public ReportInfo createReport(ReportCreateDto reportCreateDto) {
         try {
-            // create new report object
+            // 새로운 객체 생성
             ReportInfo newReportInfo = new ReportInfo();
+            FileInfo newFileInfo = new FileInfo();
+            ReportFile newReportFile = new ReportFile();
 
-            // set parameters
-            String uuid = UUID.randomUUID().toString();
             LocalDateTime date = LocalDateTime.now();
-            newReportInfo.setReportIdx(uuid);
-            newReportInfo.setPlaceIdx(pcd.getPlaceIdx());
-            newReportInfo.setContent(pcd.getContent());
+
+            // ReportInfo 채우기
+            String uuidReport = UUID.randomUUID().toString();
+            newReportInfo.setReportIdx(uuidReport);
+            newReportInfo.setPlaceIdx(reportCreateDto.getPlaceIdx());
+            newReportInfo.setContent(reportCreateDto.getContent());
             newReportInfo.setRegDt(date);
             newReportInfo.setModDt(date);
             newReportInfo.setDelYn(DelYn.N);
 
-            // create report file and add it to the list
-            List<String> photoUrls = reportCreateDto.getPhotoUrls();
-            for (String photoUrl : photoUrls) {
-                ReportFile reportFile = new ReportFile();
-                reportFile.setSaveFileName(photoUrl); // save_file_name이 ReportFile의 필드라고 가정합니다
-                // TODO: 이미지 업로드 서비스 호출 및 S3에 저장된 파일 이름 가져오기
-                String storedFileName = ""; // 이미지 업로드 서비스 호출 부분을 추가해야 합니다.
-                reportFile.setFileUrl(storedFileName);
-                reportFile.setRegDt(date);
-                reportFile.setModDt(date);
-                newReportInfo.getReportFileList().add(reportFile);
+            // FileInfo 채우기
+            List<MultipartFile> imgList = reportCreateDto.getImgList();
+            for (MultipartFile img : imgList) {
+                String uuidImg = UUID.randomUUID().toString();
+                newFileInfo.setFileIdx(uuidImg);
+//                newFileInfo.setOriginalFileName(newFileInfo.);  //직접 파일을 뜯어 넣기
+//                newFileInfo.setFileType();  //직접 파일을 뜯어 넣기
+                newFileInfo.setFileName(uuidImg + newFileInfo.getFileType());
+                newFileInfo.setSaveFileName("https://" + newFileInfo.getFileName());    // 폴더명 뭐시기 해서 넣기
+
+                // 이미지 업로드 서비스 호출
+//                MultipartFile multipartFile = s3Uploader.upload(newFileInfo);
+
+                // reportfile create
+                newReportFile.setFileIdx(newFileInfo);
+                newReportFile.setReportIdx(newReportInfo);
             }
-
-            // insert new data
-            ReportInfo resultData = reportInfoRepository.save(newReportInfo);
-
-            return resultData;
+            return newReportInfo;
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.DATABASE_ERROR);
         }
