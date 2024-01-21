@@ -14,6 +14,7 @@ import say.backend.exception.common.BusinessException;
 import say.backend.exception.common.ErrorCode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -40,11 +41,17 @@ public class ReportService {
             newReportInfo.setDelYn(DelYn.N);
 
             // create report file and add it to the list
-            ReportFile reportFile = new ReportFile();
-            reportFile.setSaveFileName(pcd.getPhotoUrl());
-            // List로 받아야 함.
-            // 사진 저장하는 api 따로 파기
-            newReportInfo.getReportFileList().add(reportFile);
+            List<String> photoUrls = reportCreateDto.getPhotoUrls();
+            for (String photoUrl : photoUrls) {
+                ReportFile reportFile = new ReportFile();
+                reportFile.setSaveFileName(photoUrl); // save_file_name이 ReportFile의 필드라고 가정합니다
+                // TODO: 이미지 업로드 서비스 호출 및 S3에 저장된 파일 이름 가져오기
+                String storedFileName = ""; // 이미지 업로드 서비스 호출 부분을 추가해야 합니다.
+                reportFile.setFileUrl(storedFileName);
+                reportFile.setRegDt(date);
+                reportFile.setModDt(date);
+                newReportInfo.getReportFileList().add(reportFile);
+            }
 
             // insert new data
             ReportInfo resultData = reportInfoRepository.save(newReportInfo);
