@@ -1,0 +1,6 @@
+# S3
+cloud.aws.credentials.accessKey=AKIAUZOVMNZZLRL25TMB
+cloud.aws.credentials.secretKey=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
+cloud.aws.s3.bucket=say-s3-bucket
+cloud.aws.region.static=ap-northeast-2
+cloud.aws.stack.auto-=false
