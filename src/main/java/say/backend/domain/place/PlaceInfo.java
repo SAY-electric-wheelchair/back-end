@@ -1,5 +1,6 @@
 package say.backend.domain.place;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -27,6 +28,9 @@ public class PlaceInfo {
     @Column(name="place_name")
     private String placeName;
 
+    @Column(name="place_phone")
+    private String placePhone;
+
     @Column(name="address")
     private String address;
 
@@ -46,17 +50,32 @@ public class PlaceInfo {
     @Column(name="mod_dt")
     private LocalDateTime modDt;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'N'")
     @Column(name="del_yn")
-    private DelYn delYn;
+    private DelYn delYn = DelYn.N;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")
     private List<PlaceLink> placeLinkList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")
     private List<ReportInfo> reportInfoList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "placeIdx")
     private List<PlaceFile> placeFileList = new ArrayList<>();
+
+    @Override
+    public String toString(){
+
+        String place_info_str = "";
+        place_info_str += placeName += "\n";
+        place_info_str += address += "\n";
+        place_info_str += addressDetail += "\n";
+
+        return place_info_str;
+    }
+
 }
