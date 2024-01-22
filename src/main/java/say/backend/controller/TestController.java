@@ -12,6 +12,7 @@ import say.backend.service.TestService;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/test")
 public class TestController {
 

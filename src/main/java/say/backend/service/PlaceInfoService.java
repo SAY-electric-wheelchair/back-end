@@ -1,11 +1,13 @@
 package say.backend.service;
 
 import say.backend.domain.common.DelYn;
-import say.backend.domain.file.PlaceFileRepository;
+import say.backend.domain.file.FileInfoRepository;
 import say.backend.domain.place.PlaceCategory;
 import say.backend.domain.place.PlaceInfo;
 import say.backend.domain.place.PlaceInfoRepository;
 
+import say.backend.domain.report.ReportInfoRepository;
+import say.backend.domain.report.ReportState;
 import say.backend.dto.place.*;
 import say.backend.exception.common.BusinessException;
 
@@ -25,6 +27,8 @@ import java.util.UUID;
 public class PlaceInfoService {
 
     private final PlaceInfoRepository placeInfoRepository;
+    private final ReportInfoRepository reportInfoRepository;
+    private final FileInfoRepository fileInfoRepository;
 
     @Transactional
     public PlaceInfo createPlace(PlaceCreateDto pcd) {
@@ -54,18 +58,54 @@ public class PlaceInfoService {
         }
     }
 
-    public PlaceInfo getPlaceDetail(String placeIdx) {
+    public PlaceResDto getPlaceDetail(String placeIdx) {
         try{
-            // get data
-            Optional<PlaceInfo> resultData = placeInfoRepository.findByPlaceIdx(placeIdx);
+            // declare reuslt
+            PlaceResDto resultData = new PlaceResDto();
+
+            // get place data
+            Optional<PlaceInfo> placeData = placeInfoRepository.findByPlaceIdx(placeIdx);
+            List<ReportState> reportStateList = reportInfoRepository.findByPlaceIdx(placeData.get());
+            List<String> fileList = fileInfoRepository.findSaveFileNamesByPlaceIdx(placeData.get());
 
             // check empty value
-            if(resultData.isEmpty()) {
+            if(placeData.isEmpty()) {
                 throw new BusinessException(ErrorCode.NO_EXIST_VALUE);
+            } else {
+                resultData.setPlaceIdx(placeData.get().getPlaceIdx());
+                resultData.setPlaceName(placeData.get().getPlaceName());
+                resultData.setPlacePhone(placeData.get().getPlacePhone());
+                resultData.setAddress(placeData.get().getAddress());
+                resultData.setAddressDetail(placeData.get().getAddressDetail());
+                resultData.setPlaceCategory(placeData.get().getPlaceCategory());
+                resultData.setCoordinate(placeData.get().getCoordinate());
+                resultData.setRegDt(placeData.get().getRegDt());
+                resultData.setModDt(placeData.get().getModDt());
+                resultData.setDelYn(placeData.get().getDelYn());
+            }
+
+            // setReportState
+            if(reportStateList.isEmpty()) {
+                resultData.setReportState("사용가능");
+            }
+            else if(reportStateList.contains(ReportState.REPORT_STANDBY)
+                || reportStateList.contains(ReportState.REPORT_COMPLETE)){
+                resultData.setReportState("고장");
+
+            }
+            else if(reportStateList.contains(ReportState.REPAIR)) {
+                resultData.setReportState("수리중");
+            } else {
+                resultData.setReportState("사용가능");
+            }
+
+            // set Img data
+            if(!fileList.isEmpty()){
+                resultData.setPlaceImgList(fileList);
             }
 
             // return
-            return resultData.get();
+            return resultData;
         } catch (BusinessException e){
             throw e;
         } catch(Exception e) {

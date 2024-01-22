@@ -1,5 +1,6 @@
 package say.backend.domain.report;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -46,6 +47,7 @@ public class ReportInfo {
     @Column(name="del_yn")
     private DelYn delYn;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reportIdx")
     private List<ReportFile> reportFileList = new ArrayList<>();
 }
